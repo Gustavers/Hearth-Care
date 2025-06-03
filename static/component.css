@@ -1,0 +1,112 @@
+.main-content {
+    background: white;
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    animation: slideUp 0.8s ease;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+input, select {
+    padding: 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+}
+
+.predict-button {
+    margin-top: 2rem;
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: var(--border-radius);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+}
+
+.predict-button:hover {
+    background-color: #2980b9;
+}
+
+.result-card {
+    text-align: center;
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    margin-top: 1rem;
+}
+
+.result-card.high-risk {
+    background-color: #ffe5e5;
+    border: 2px solid var(--danger-color);
+    color: var(--danger-color);
+    animation: pulse 1.5s infinite;
+}
+
+.result-card.low-risk {
+    background-color: #e8fce8;
+    border: 2px solid var(--success-color);
+    color: var(--primary-color);
+}
+
+.result-header h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.probability {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.feature-importance, .model-metrics {
+    margin-top: 2rem;
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.metric-card {
+    background-color: #f0f6ff;
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    text-align: center;
+    box-shadow: 0 0 8px rgba(0,0,0,0.05);
+}
+
+.metric-card h3 {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.metric-card p {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--secondary-color);
+}

@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block content %}
+<header>
+    <h1 class="fade-in">🫀 Heart-Care 🫀</h1>
+    <h2 class="fade-in">Sistem Prediksi Penyakit Jantung</h2>
+    <p class="subtitle fade-in-delay">Masukkan data anda untuk memprediksi risiko penyakit jantung</p>
+</header>
+
+<div class="main-content slide-up">
+    <form method="post" class="prediction-form">
+        <div class="form-grid">
+            {% for label, name, type, minmax in [
+                ('Usia:', 'age', 'number', 'min=1 max=120'),
+                ('Tekanan Darah (mm Hg):', 'trestbps', 'number', 'min=90 max=200'),
+                ('Kolesterol (mg/dl):', 'chol', 'number', 'min=100 max=600'),
+                ('Detak Jantung Maksimum:', 'thalach', 'number', 'min=60 max=220'),
+            ] %}
+            <div class="input-group">
+                <label for="{{ name }}">{{ label }}</label>
+                <input type="{{ type }}" name="{{ name }}" id="{{ name }}" required {{ minmax }}>
+            </div>
+            {% endfor %}
+
+            {% for label, name, options in [
+                ('Jenis Kelamin:', 'sex', [('1', 'Laki-laki'), ('0', 'Perempuan')]),
+                ('Tipe Nyeri Dada:', 'cp', [('0', 'Typical Angina'), ('1', 'Atypical Angina'), ('2', 'Non-anginal Pain'), ('3', 'Asymptomatic')]),
+                ('Gula Darah Puasa > 120 mg/dl:', 'fbs', [('1', 'Ya'), ('0', 'Tidak')]),
+            ] %}
+            <div class="input-group">
+                <label for="{{ name }}">{{ label }}</label>
+                <select name="{{ name }}" id="{{ name }}" required>
+                    {% for value, label in options %}
+                    <option value="{{ value }}">{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            {% endfor %}
+        </div>
+        <button type="submit" class="predict-button pulse">🔍 Prediksi</button>
+    </form>
+
+    {% if error %}
+    <div class="error-message">{{ error }}</div>
+    {% endif %}
+
+    {% if prediction %}
+    <div class="prediction-result fade-in">
+        <h2>Hasil Prediksi</h2>
+        <div class="result-card {% if prediction.prediction == 1 %}high-risk{% else %}low-risk{% endif %}">
+            <div class="result-header">
+                <h3>{% if prediction.prediction == 1 %}⚠️ Risiko Tinggi{% else %}✅ Risiko Rendah{% endif %}</h3>
+                <p class="probability">Probabilitas: {{ prediction.probability * 100 }}%</p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if feature_importance %}
+    <div class="feature-importance">
+        <h2>Pengaruh Fitur</h2>
+        <canvas id="featureChart"></canvas>
+        <script>
+            const featureData = JSON.parse('{{ feature_importance|tojson|safe }}');
+            const ctx = document.getElementById('featureChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(featureData),
+                    datasets: [{
+                        label: 'Tingkat Kepentingan Fitur',
+                        data: Object.values(featureData),
+                        backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        </script>
+    </div>
+    {% endif %}
+
+    {% if metrics %}
+    <div class="model-metrics">
+        <h2>Performa Model</h2>
+        <div class="metrics-grid">
+            {% for label, key in [('Akurasi', 'accuracy'), ('Presisi', 'precision'), ('Recall', 'recall'), ('F1 Score', 'f1_score')] %}
+            <div class="metric-card">
+                <h3>{{ label }}</h3>
+                <p>{{ (metrics[key] * 100)|round(1) }}%</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
