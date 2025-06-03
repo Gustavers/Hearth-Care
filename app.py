@@ -4,7 +4,8 @@ from config import Config
 
 app = Flask(__name__)
 
-predictor = HeartDiseasePredictor(Config.DATASET_PATH)
+predictor = HeartDiseasePredictor(Config.DATASET_PATH, model_path="saved_model.pkl", scaler_path="scaler.pkl")
+
 
 @app.route("/", methods=["GET", "POST"])
 def index():
